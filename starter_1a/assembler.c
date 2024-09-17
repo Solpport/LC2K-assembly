@@ -268,12 +268,6 @@ void secondPass(FILE *inFilePtr, FILE *outFilePtr)
             int opcodeBits = 4;
             int offset;
 
-            if (offset < -32768 || offset > 32767)
-            {
-                printf("Error: offset '%d' out of range for instruction at address %d\n", offset, address);
-                exit(1);
-            }
-
             if (isNumber(arg2))
             {
                 offset = atoi(arg2);
@@ -295,6 +289,12 @@ void secondPass(FILE *inFilePtr, FILE *outFilePtr)
                     printf("Error: Label '%s' not found\n", arg2);
                     exit(1);
                 }
+            }
+
+            if (offset < -32768 || offset > 32767)
+            {
+                printf("Error: offset '%d' out of range for instruction at address %d\n", offset, address);
+                exit(1);
             }
 
             machineCode = (opcodeBits << 22) | (atoi(arg0) << 19) | (atoi(arg1) << 16) | (offset & 0xFFFF);
